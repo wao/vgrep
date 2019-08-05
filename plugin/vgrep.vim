@@ -1,20 +1,13 @@
-ruby require "tempfile"
+ruby require "./vgrep"
 
 function Grep(pat,bufnr)
-ruby << EOF
-    pattern = Regexp.new(VIM.evaluate("a:pat"))
-    file = Tempfile.new("foo")
-    buf = VIM::Buffer[VIM.evaluate("a:bufnr")-1]
-    1.upto(buf.count) do |i|
-        line = buf[i]
-        if pattern.match?(line)
-            file.write(line)
-        end
-    end
-    file.flush
-    VIM.command("vne #{file.path}")
-    VIM.command("setlocal readonly")
-EOF
+    ruby Vgrep.grep(VIM.evaluate("a:pat"), VIM.evaluate("a:bufnr"))
 endfunction
 
-call Grep( "Tk", 1 )
+function Gjump()
+    ruby Vgrep.jump()
+endfunction
+
+call Grep( "ERROR", 1 )
+
+call Gjump()
