@@ -25,19 +25,21 @@ module Vgrep
     buf = DATA[VIM::Buffer.current.number]
     
     if buf
-      pos = buf.line_nums.bsearch{ |x| x >= VIM::Window.current.cursor[0] }
-      if pos.nil?
-        pos = 1
-      end
+      # pos = buf.line_nums.bsearch{ |x| x >= VIM::Window.current.cursor[0] }
+      # if pos.nil?
+        # pos = 1
+      # end
+
+      pos = buf.line_nums[ VIM::Window.current.cursor[0] ]
 
       0.upto(VIM::Window.count-1) do |wi|
         win = VIM::Window[wi]
         if win.buffer
-          puts win.buffer.name
-          puts win.buffer.number
+          # puts win.buffer.name
+          # puts win.buffer.number
         end
         if win.buffer&.number == buf.master_bufnr
-          puts "got matched win #{wi}"
+          VIM.command("#{wi+1}wincmd w")
           win.cursor = [ pos, 1 ]
         end
       end
