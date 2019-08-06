@@ -1,4 +1,5 @@
 require "tempfile"
+require "json"
 
 module Vgrep
   DATA={}
@@ -20,6 +21,10 @@ module Vgrep
       @regexp = Regexp.new(pat)
       @hi_index = hi_index
       @color_index = color_index
+    end
+
+    def to_h
+      { pat: @pat, hi_index: @hi_index, color_index: @color_index } 
     end
 
     def syntax
@@ -60,12 +65,12 @@ module Vgrep
     HI[hi_index].hi
   end
 
-  def self.testPat
-    pat = Pat.new("ERROR", 1, 1)
-    HI[1] = pat
-    puts pat.hi_name
-    pat.syntax
-    pat.hi
+  def self.save
+    
+  end
+
+  def self.load
+
   end
 
   class Buf
