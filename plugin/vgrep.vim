@@ -8,6 +8,8 @@ function Gjump()
     ruby Vgrep.jump()
 endfunction
 
-call Grep( "ERROR", 1 )
+" call Grep( "ERROR", 1 )
 
-call Gjump()
+" call Gjump()
+
+ruby Vgrep.pat("ERROR")

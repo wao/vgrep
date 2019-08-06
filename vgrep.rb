@@ -3,6 +3,71 @@ require "tempfile"
 module Vgrep
   DATA={}
 
+  RGBS=[
+    "AliceBlue", "gray", "MidnightBlue",
+    "cyan", "DarkGreen", "green", "YellowGreen",
+    "LightYello", "IndianRed", "OrangeRed", "LighPink",
+    "VioletRed", "purple", "SkyBlue1", "maroon", "LightGreen"
+  ]
+
+  HI={}
+
+  class Pat
+    attr_reader :regexp
+
+    def initialize(pat, hi_index, color_index)
+      @pat = pat
+      @regexp = Regexp.new(pat)
+      @hi_index = hi_index
+      @color_index = color_index
+    end
+
+    def syntax
+      # puts "syntax match #{hi_name} \".*#{@pat}.*\""
+      VIM.command("syntax match #{hi_name} \".*#{@pat}.*\"")
+    end
+
+    def hi
+      VIM.command("hi #{hi_name} guibg=#{guibg}")
+    end
+
+    def nohi
+      VIM.command("hi clear #{hi_name}")
+    end
+
+    def hi_name
+      "GPAT_#{@hi_index}"
+    end
+
+    def guibg
+      RGBS[@color_index]
+    end
+  end
+
+  def self.find_hi_index
+    i = 0
+    while !HI[i].nil? do
+      i = i + 1
+    end
+
+    i
+  end
+
+  def self.pat(pat)
+    hi_index = find_hi_index
+    HI[hi_index] = Pat.new(pat, hi_index, Random.rand(RGBS.length))
+    HI[hi_index].syntax
+    HI[hi_index].hi
+  end
+
+  def self.testPat
+    pat = Pat.new("ERROR", 1, 1)
+    HI[1] = pat
+    puts pat.hi_name
+    pat.syntax
+    pat.hi
+  end
+
   class Buf
     attr_reader :bufnr, :master_bufnr, :line_nums, :temp_file
     def initialize(master_bufnr, line_nums, temp_file)
