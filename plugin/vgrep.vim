@@ -9,8 +9,8 @@ function Gjump()
 endfunction
 
 function Reload()
-    ruby $".delete "./vgrep"
-    ruby require "./vgrep"
+    ruby $".delete "./vgrep.rb"
+    ruby require "./vgrep.rb"
 endfunction
 
 " call Grep( "ERROR", 1 )

@@ -33,6 +33,9 @@ module Vgrep
     end
 
     def hi
+      if VIM.evaluate("hlID('#{hi_name}')") == 0
+        syntax
+      end
       VIM.command("hi #{hi_name} guibg=#{guibg}")
     end
 
@@ -56,6 +59,18 @@ module Vgrep
     end
 
     i
+  end
+
+  def self.hi
+    HI.each_pair do |hi_index,pat|
+      pat.hi
+    end
+  end
+
+  def self.nohi
+    HI.each_pair do |hi_index,pat|
+      pat.nohi
+    end
   end
 
   def self.pat(pat)
