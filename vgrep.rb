@@ -33,7 +33,7 @@ module Vgrep
     end
 
     def hi
-      if VIM.evaluate("hlID('#{hi_name}')") == 0
+      if VIM.command("syn list #{hi_name}").strip.empty?
         syntax
       end
       VIM.command("hi #{hi_name} guibg=#{guibg}")
