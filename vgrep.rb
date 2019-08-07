@@ -1,5 +1,5 @@
 require "tempfile"
-require "json"
+require "yaml"
 
 module Vgrep
   DATA={}
@@ -14,7 +14,7 @@ module Vgrep
   HI={}
 
   class Pat
-    attr_reader :regexp
+    attr_reader :regexp, :pat
 
     def initialize(pat, hi_index, color_index)
       @pat = pat
@@ -23,7 +23,7 @@ module Vgrep
       @color_index = color_index
     end
 
-    def to_h
+    def to_json
       { pat: @pat, hi_index: @hi_index, color_index: @color_index } 
     end
 
@@ -65,12 +65,24 @@ module Vgrep
     HI[hi_index].hi
   end
 
+  def self.cfg_file_name
+     "#{ENV["HOME"]}/.config/vgrep.yaml"
+  end
+
   def self.save
-    
+    File.open( self.cfg_file_name, "w" ) do |wr|
+      wr << HI.to_yaml
+    end
   end
 
   def self.load
-
+    HI.merge!(YAML.load(File.read( self.cfg_file_name )))
+  end
+  
+  def self.list
+    HI.each_pair do |hi_index, pat|
+      puts "#{hi_index}  #{pat.pat}"
+    end
   end
 
   class Buf

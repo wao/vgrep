@@ -8,8 +8,15 @@ function Gjump()
     ruby Vgrep.jump()
 endfunction
 
+function Reload()
+    ruby $".delete "./vgrep"
+    ruby require "./vgrep"
+endfunction
+
 " call Grep( "ERROR", 1 )
 
 " call Gjump()
 
-ruby Vgrep.pat("ERROR")
+" ruby Vgrep.pat("ERROR")
+
+ruby Vgrep.load
